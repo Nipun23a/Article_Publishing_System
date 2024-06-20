@@ -26,3 +26,7 @@ Route::get('/db-test', function () {
         return 'Could not connect to the database. Error: ' . $e->getMessage();
     }
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
