@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 
@@ -29,4 +31,12 @@ Route::get('/db-test', function () {
 
 Auth::routes();
 
+// Home Route
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Profile Route
+Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+// Article routes
+Route::resource('articles', ArticleController::class);
