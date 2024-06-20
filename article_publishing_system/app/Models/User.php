@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'user_role',
+        'user_pic',
+        'user_bio'
     ];
 
     /**
@@ -42,4 +45,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function role() : \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(UserRole::class, 'user_role');
+    }
+
+    public function articles() : \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Article::class, 'author_id');
+    }
 }
