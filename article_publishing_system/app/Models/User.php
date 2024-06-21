@@ -48,13 +48,19 @@ class User extends Authenticatable
 
 
 
-    public function role() : \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function userRole()
     {
         return $this->belongsTo(UserRole::class, 'user_role');
     }
 
-    public function articles() : \Illuminate\Database\Eloquent\Relations\HasMany
+    public function articles()
     {
         return $this->hasMany(Article::class, 'author_id');
     }
+
+    public function getAuthPassword():string
+    {
+        return $this->user_password;
+    }
+
 }
