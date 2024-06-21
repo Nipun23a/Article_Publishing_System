@@ -32,17 +32,13 @@ Route::get('/db-test', function () {
 Auth::routes();
 
 // Authentication Routes
+    //User Routes
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-//Admin Routes
+    //Admin Routes
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');
 });
-//Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
-
-
-
-
 // Profile Route
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
