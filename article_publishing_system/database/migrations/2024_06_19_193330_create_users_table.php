@@ -16,8 +16,8 @@ return new class extends Migration
             $table -> string("user_name",20);
             $table ->string("user_email",256) ->unique();
             $table ->string("user_password",256);
-            $table -> string("user_pic",256);
-            $table -> string("user_bio",128);
+            $table -> string("user_pic",256)->default('default')->nullable();
+            $table -> string("user_bio",128)->default('default')->nullable();
             $table->unsignedBigInteger('user_role');
             $table->timestamps();
 
