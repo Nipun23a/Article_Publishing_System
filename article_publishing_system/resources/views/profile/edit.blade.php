@@ -23,7 +23,7 @@
                                 <div class="col-md-6">
                                     <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="user_name" value="{{ old('user_name', $user->user_name) }}" required autofocus>
 
-                                    @error('name')
+                                    @error('user_name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -35,9 +35,9 @@
                                 <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('Email Address') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email', $user->email) }}" required>
+                                    <input id="email" type="email" class="form-control @error('user_email') is-invalid @enderror" name="user_email" value="{{ old('user_email', $user->user_email) }}" required>
 
-                                    @error('email')
+                                    @error('user_email')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
