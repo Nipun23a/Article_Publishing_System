@@ -29,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+
 
     /**
      * Create a new controller instance.
@@ -78,7 +78,7 @@ class RegisterController extends Controller
 
     protected function registered(Request $request, $user)
     {
-        return redirect($this->redirectPath())->with('success', 'Registration successful!');
+        return redirect('/')->with('success', 'Registration successful!');
     }
 
     protected function sendFailedLoginResponse(Request $request)
