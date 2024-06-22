@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -33,16 +35,20 @@ Auth::routes();
 
 // Authentication Routes
     //User Routes
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
+
+
 
     //Admin Routes
 Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/articles', [ArticleController::class, 'adminIndex'])->name('admin.articles.index');
 });
+Route::get('/admin/articles', [ArticleController::class, 'adminIndex'])->name('admin.articles.index')->middleware('admin');
 // Profile Route
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
 // Article routes
-Route::resource('articles', ArticleController::class);
+Route::resource('articles', \App\Http\Controllers\ArticleController::class);
 
