@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id(); // article_id
             $table->string('article_title', 255);
             $table->text('article_content');
+            $table ->boolean('is_published')->default(false);
             $table->timestamps(); // created_at and updated_at columns
             $table->unsignedBigInteger('author_id');
 
