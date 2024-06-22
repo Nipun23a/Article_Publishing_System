@@ -16,6 +16,13 @@ class UsersTableSeeder extends Seeder
             'user_role' => 1,
             'user_bio' => 'Admin user bio',
         ]);
+        User::create([
+            'user_name' => 'User',
+            'user_email' => 'user@example.com',
+            'user_password' => Hash::make('123456789'),
+            'user_role' => 2,
+            'user_bio' => 'User bio',
+        ]);
     }
 }
 
