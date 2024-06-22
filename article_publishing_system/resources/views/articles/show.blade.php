@@ -11,13 +11,16 @@
                         <h1>{{ $article->article_title }}</h1>
                         <p>{{ $article->article_content }}</p>
 
-                        <a href="{{ route('articles.edit', $article) }}" class="btn btn-warning">{{ __('Edit') }}</a>
-
-                        <form action="{{ route('articles.destroy', $article) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">{{ __('Delete') }}</button>
-                        </form>
+                        @can('update', $article)
+                            <a href="{{ route('articles.edit', $article) }}" class="btn btn-warning">{{ __('Edit') }}</a>
+                        @endcan
+                        @can('delete',$article)
+                            <form action="{{ route('articles.destroy', $article) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">{{ __('Delete') }}</button>
+                            </form>
+                        @endcan
                     </div>
                 </div>
             </div>
