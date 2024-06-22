@@ -27,11 +27,13 @@ class ArticleController extends Controller
         $request->validate([
             'article_title' => 'required|string|max:255',
             'article_content' => 'required|string',
+            'is_published' => 'required|boolean',
         ]);
 
         Article::create([
             'article_title' => $request->article_title,
             'article_content' => $request->article_content,
+            'is_published' => $request->is_published,
             'author_id' => Auth::id(),
         ]);
 
@@ -41,6 +43,9 @@ class ArticleController extends Controller
     public function show($id)
     {
         $article = Article::findOrFail($id);
+        if (!$article->is_published && $article->author_id !== Auth::id()) {
+            abort(403);
+        }
         return view('articles.show', compact('article'));
     }
 
@@ -52,18 +57,19 @@ class ArticleController extends Controller
 
     public function update(Request $request, Article $article)
     {
-        // Authorize the update action
         $this->authorize('update', $article);
         $request->validate([
             'article_title' => 'required|string|max:255',
             'article_content' => 'required|string',
+            'is_published' => 'required|boolean',
         ]);
+
         $article->update([
             'article_title' => $request->input('article_title'),
             'article_content' => $request->input('article_content'),
+            'is_published' => $request->input('is_published'),
         ]);
 
-        // Redirect to articles index with a success message
         return redirect()->route('articles.index')->with('status', 'Article updated successfully.');
     }
 
@@ -73,11 +79,26 @@ class ArticleController extends Controller
         $article = Article::findOrFail($id);
         $this->authorize('delete', $article);
         $article->delete();
-        return redirect()->route('articles.index')->with('status', 'Article deleted successfully.');
+        if(Auth::user()->userRole->role_name == "admin") {
+            return redirect()->route('admin.articles.index')->with('status', 'Article deleted successfully.');
+        }else{
+            return redirect()->route('articles.index')->with('status', 'Article deleted successfully.');
+        }
+    }
+
+    public function dashboard()
+    {
+        $articles = Article::where('is_published', true)
+            ->where('author_id', '!=', Auth::id())
+            ->get();
+        return view('home', compact('articles'));
     }
     public function adminIndex()
     {
-        $articles = Article::all();
+        $articles = Article::where('is_published', true)
+            ->where('author_id', '!=', Auth::id())
+            ->get();
         return view('admin.articles.index', compact('articles'));
     }
+
 }
