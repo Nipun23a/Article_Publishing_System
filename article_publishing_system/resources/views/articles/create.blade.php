@@ -7,35 +7,48 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">{{ __('Create New Article') }}</div>
-
                     <div class="card-body">
                         <form method="POST" action="{{ route('articles.store') }}">
                             @csrf
-
                             <div class="form-group row">
                                 <label for="article_title" class="col-md-4 col-form-label text-md-right">{{ __('Title') }}</label>
-
                                 <div class="col-md-6">
                                     <input id="article_title" type="text" class="form-control @error('article_title') is-invalid @enderror" name="article_title" value="{{ old('article_title') }}" required autofocus>
-
                                     @error('article_title')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                    <strong>{{ $message }}</strong>
+                                </span>
                                     @enderror
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label for="article_content" class="col-md-4 col-form-label text-md-right">{{ __('Content') }}</label>
-
                                 <div class="col-md-6">
                                     <textarea id="article_content" class="form-control @error('article_content') is-invalid @enderror" name="article_content" required>{{ old('article_content') }}</textarea>
-
                                     @error('article_content')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-4 col-form-label text-md-right">{{ __('Published') }}</label>
+                                <div class="col-md-6">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="is_published" id="published" value="1" {{ old('is_published') == '1' ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="published">Published</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="is_published" id="not_published" value="0" {{ old('is_published') == '0' ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="not_published">Not Published</label>
+                                    </div>
+                                    @error('is_published')
+                                    <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                                     @enderror
                                 </div>
                             </div>
