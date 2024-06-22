@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
 
 class ResetPasswordController extends Controller
 {
@@ -28,30 +31,43 @@ class ResetPasswordController extends Controller
      */
     protected $redirectTo = '/';
 
+    protected function rules()
+    {
+        return [
+            'token' => 'required',
+            'user_email' => 'required|email',
+            'password' => 'required|confirmed|min:8',
+        ];
+    }
+
+    protected function credentials(Request $request)
+    {
+        return $request->only(
+            'user_email', 'password', 'password_confirmation', 'token'
+        );
+    }
 
 
     public function reset(Request $request)
     {
-        $request->validate([
-            'user_email' => 'required|email',
-            'password' => 'required|confirmed|min:8',
-            'token' => 'required',
-        ]);
+        $request->validate($this->rules(), $this->validationErrorMessages());
 
-        $status = Password::reset(
-            $request->only('user_email', 'password', 'password_confirmation', 'token'),
+        $response = $this->broker()->reset(
+            $this->credentials($request),
             function ($user, $password) {
-                $user->forceFill([
-                    'password' => Hash::make($password)
-                ])->save();
+                $this->resetPassword($user, $password);
             }
         );
 
-        if ($status == Password::PASSWORD_RESET) {
-            return redirect()->route('login')->with('success', 'Your password has been reset successfully.');
-        } else {
-            return back()->withErrors(['user_email' => __($status)]);
-        }
+        return $response == Password::PASSWORD_RESET
+            ? $this->sendResetResponse($request, $response)
+            : $this->sendResetFailedResponse($request, $response);
+    }
+
+    protected function resetPassword($user, $password)
+    {
+        $user->password = Hash::make($password);
+        $user->save();
     }
 
 }

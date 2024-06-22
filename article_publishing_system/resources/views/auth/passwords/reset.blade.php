@@ -27,7 +27,7 @@
                                 <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="email" type="email" class="form-control @error('user_email') is-invalid @enderror" name="user_email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus>
+                                    <input id="email" type="email" class="form-control @error('user_email') is-invalid @enderror" name="user_email" value="{{ $email ?? old('user_email') }}" required autocomplete="email" autofocus>
 
                                     @error('user_email')
                                     <span class="invalid-feedback" role="alert">

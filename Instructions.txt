@@ -1,0 +1,19 @@
+Instructions
+
+1.Download The Project From The GitHub
+2.Extract All the  Files in to one folder
+3.Create article_publish_system on MySQL database
+4.Setup database connection
+5.Run the project using php artisan serve function in cmd where project is located
+6./db-test link can check database connection
+7. use Logged in as Admin
+	username:admin@example.com
+	password:password
+8.use Logged in as User
+	username:user@example.com
+	password:123456789
+9.You can run test file in test folder to unit tests
+
+Thank you
+
+
