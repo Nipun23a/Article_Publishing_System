@@ -1,8 +1,6 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +17,17 @@ use Illuminate\Support\Facades\DB;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+
+
+Route::get('/db-test', function () {
+    try {
+        DB::connection()->getPdo();
+        return 'Database connection is successful!';
+    } catch (\Exception $e) {
+        return 'Could not connect to the database. Error: ' . $e->getMessage();
+    }
+});
 
 Auth::routes();
 
@@ -42,8 +51,4 @@ Route::post('/profile', [ProfileController::class, 'update'])->name('profile.upd
 // Article routes
 Route::resource('articles', \App\Http\Controllers\ArticleController::class);
 
-//Reseting password Controllers
-Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request')->middleware('guest');
-Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email')->middleware('guest');
-Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+
