@@ -13,8 +13,21 @@
                             {{ session('status') }}
                         </div>
                     @endif
-
-                    {{ __('You are logged in!') }}
+                        <h2>{{ __('Published Articles') }}</h2>
+                        @if ($articles->isEmpty())
+                            <p>{{ __('No articles available.') }}</p>
+                        @else
+                            @foreach ($articles as $article)
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ $article->article_title }}</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">by {{ $article->user->name }}</h6>
+                                        <p class="card-text">{{ Str::limit($article->article_content, 150) }}</p>
+                                        <a href="{{ route('articles.show', $article) }}" class="card-link">{{ __('Read more') }}</a>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
                 </div>
             </div>
         </div>
