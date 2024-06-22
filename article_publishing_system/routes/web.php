@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
@@ -18,24 +20,11 @@ use Illuminate\Support\Facades\DB;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/db-test', function () {
-    try {
-        DB::connection()->getPdo();
-        return 'Database connection is successful!';
-    } catch (\Exception $e) {
-        return 'Could not connect to the database. Error: ' . $e->getMessage();
-    }
-});
-
 Auth::routes();
 
 // Authentication Routes
     //User Routes
-Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
+Route::get('/', [ArticleController::class, 'dashboard'])->name('home')->middleware('auth');
 
 
 
@@ -45,6 +34,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/articles', [ArticleController::class, 'adminIndex'])->name('admin.articles.index');
 });
 Route::get('/admin/articles', [ArticleController::class, 'adminIndex'])->name('admin.articles.index')->middleware('admin');
+Route::get('/admin/users', [\App\Http\Controllers\AdminController::class, 'allUsers'])->name('admin.users.index');
 // Profile Route
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -52,3 +42,8 @@ Route::post('/profile', [ProfileController::class, 'update'])->name('profile.upd
 // Article routes
 Route::resource('articles', \App\Http\Controllers\ArticleController::class);
 
+//Reseting password Controllers
+Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request')->middleware('guest');
+Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email')->middleware('guest');
+Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
