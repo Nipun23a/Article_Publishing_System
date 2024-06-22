@@ -38,37 +38,46 @@ class ArticleController extends Controller
         return redirect()->route('articles.index')->with('status', 'Article created successfully.');
     }
 
-    public function show(Article $article): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function show($id)
     {
-        $this->authorize('view', $article);
+        $article = Article::findOrFail($id);
         return view('articles.show', compact('article'));
     }
 
-    public function edit(Article $article): \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    public function edit(Article $article)
     {
         $this->authorize('update', $article);
         return view('articles.edit', compact('article'));
     }
 
-    public function update(Request $request, Article $article): \Illuminate\Http\RedirectResponse
+    public function update(Request $request, Article $article)
     {
+        // Authorize the update action
         $this->authorize('update', $article);
-
         $request->validate([
             'article_title' => 'required|string|max:255',
             'article_content' => 'required|string',
         ]);
+        $article->update([
+            'article_title' => $request->input('article_title'),
+            'article_content' => $request->input('article_content'),
+        ]);
 
-        $article->update($request->all());
-
+        // Redirect to articles index with a success message
         return redirect()->route('articles.index')->with('status', 'Article updated successfully.');
     }
 
-    public function destroy(Article $article): \Illuminate\Http\RedirectResponse
+
+    public function destroy($id)
     {
+        $article = Article::findOrFail($id);
         $this->authorize('delete', $article);
         $article->delete();
-
         return redirect()->route('articles.index')->with('status', 'Article deleted successfully.');
+    }
+    public function adminIndex()
+    {
+        $articles = Article::all();
+        return view('admin.articles.index', compact('articles'));
     }
 }
